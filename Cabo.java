@@ -11,11 +11,12 @@ public class Cabo extends Produto {
         this.tamanho = tamanho;
 
         PreparedStatement stmt = DAO.createConnection().prepareStatement(
-                "INSERT INTO cabo (nome, preco, peso, tamanho) VALUES (?, ?, ?, ?);");
+                "INSERT INTO produto (nome, preco, peso, tamanho, id_tipo) VALUES (?, ?, ?, ?, ?);");
         stmt.setString(1, this.getNome());
         stmt.setDouble(2, this.getPreco());
         stmt.setDouble(3, this.getPeso());
         stmt.setDouble(4, this.getTamanho());
+        stmt.setInt(5, 2);
         stmt.execute();
         DAO.closeConnection();
     }

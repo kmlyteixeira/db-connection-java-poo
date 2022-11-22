@@ -10,11 +10,12 @@ public class Tijolo extends Produto {
         this.peso = peso;
 
         PreparedStatement stmt = DAO.createConnection().prepareStatement(
-                "INSERT INTO tijolo (nome, preco, cor, peso) VALUES (?, ?, ?, ?);");
+                "INSERT INTO produto (nome, preco, cor, peso, id_tipo) VALUES (?, ?, ?, ?, ?);");
         stmt.setString(1, this.getNome());
         stmt.setDouble(2, this.getPreco());
         stmt.setString(3, this.getCor());
         stmt.setDouble(4, this.getPeso());
+        stmt.setInt(5, 3);
         stmt.execute();
         DAO.closeConnection();
     }

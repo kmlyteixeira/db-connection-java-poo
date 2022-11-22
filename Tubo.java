@@ -10,11 +10,12 @@ public class Tubo extends Produto {
         this.tamanho = tamanho;
 
         PreparedStatement stmt = DAO.createConnection().prepareStatement(
-                "INSERT INTO tubo (nome, preco, cor, tamanho) VALUES (?, ?, ?, ?);");
+                "INSERT INTO produto (nome, preco, cor, tamanho, id_tipo) VALUES (?, ?, ?, ?, ?);");
         stmt.setString(1, this.getNome());
         stmt.setDouble(2, this.getPreco());
         stmt.setString(3, this.getCor());
         stmt.setDouble(4, this.getTamanho());
+        stmt.setInt(5, 1);
         stmt.execute();
         DAO.closeConnection();
     }
