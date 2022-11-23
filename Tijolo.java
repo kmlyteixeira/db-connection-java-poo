@@ -1,3 +1,4 @@
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 
 public class Tijolo extends Produto {
@@ -36,9 +37,18 @@ public class Tijolo extends Produto {
         this.peso = peso;
     }
 
-    @Override
-    public String toString() {
-        return "Tijolo: " + this.getNome() + " - R$ " + this.getPreco() + " - Cor: " + this.getCor() + " - Peso: " + this.getPeso();
+    public static void alteraCor(Connection conexao, String cor, int id) throws Exception {
+        PreparedStatement stmt = conexao.prepareStatement("UPDATE produto SET cor = ? WHERE id = ?;");
+        stmt.setString(1, cor);
+        stmt.setInt(2, id);
+        stmt.execute();
+    }
+
+    public static void alteraPeso(Connection conexao, double peso, int id) throws Exception {
+        PreparedStatement stmt = conexao.prepareStatement("UPDATE produto SET peso = ? WHERE id = ?;");
+        stmt.setDouble(1, peso);
+        stmt.setInt(2, id);
+        stmt.execute();
     }
 
     @Override

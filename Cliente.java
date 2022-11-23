@@ -1,4 +1,6 @@
+import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
 public class Cliente {
     private int id;
@@ -11,8 +13,8 @@ public class Cliente {
 
         PreparedStatement stmt = DAO.createConnection().prepareStatement(
                 "INSERT INTO cliente (nome, cpf) VALUES (?, ?);");
-        stmt.setString(2, this.getNome());
-        stmt.setString(3, this.getCpf());
+        stmt.setString(1, this.getNome());
+        stmt.setString(2, this.getCpf());
         stmt.execute();
         DAO.closeConnection();
     }
@@ -42,9 +44,44 @@ public class Cliente {
         this.cpf = cpf;
     }
 
-    @Override
-    public String toString() {
-        return "Cliente: " + this.getNome() + " - CPF: " + this.getCpf();
+    public static Cliente getCliente(Connection conexao, int id) throws Exception {
+        PreparedStatement stmt = conexao.prepareStatement("SELECT * FROM cliente WHERE id = ?;");
+        stmt.setInt(1, id);
+        ResultSet rs = stmt.executeQuery();
+        if (rs.next()) {
+            Cliente cliente = new Cliente(rs.getString("nome"), rs.getString("cpf"));
+            cliente.setId(rs.getInt("id"));
+            return cliente;
+        }
+        return null;
+    }
+
+    public static void imprimirClientes(Connection conexao) throws Exception {
+        PreparedStatement stmt = conexao.prepareStatement("SELECT * FROM cliente;");
+        ResultSet rs = stmt.executeQuery();
+        while (rs.next()) {
+            System.out.println("Cliente: " + rs.getString("nome") + " - CPF: " + rs.getString("cpf") + "\n\n");
+        }
+    }
+
+    public static void alterarCpf(Connection conexao, String cpf, int id) throws Exception {
+        PreparedStatement stmt = conexao.prepareStatement("UPDATE cliente SET cpf = ? WHERE id = ?;");
+        stmt.setString(1, cpf);
+        stmt.setInt(2, id);
+        stmt.execute();
+    }
+
+    public static void alterarNome(Connection conexao, String nome, int id) throws Exception {
+        PreparedStatement stmt = conexao.prepareStatement("UPDATE cliente SET nome = ? WHERE id = ?;");
+        stmt.setString(1, nome);
+        stmt.setInt(2, id);
+        stmt.execute();
+    }
+
+    public static void excluirCliente(Connection conexao, int id) throws Exception {
+        PreparedStatement stmt = conexao.prepareStatement("DELETE FROM cliente WHERE id = ?;");
+        stmt.setInt(1, id);
+        stmt.execute();
     }
 
     @Override
